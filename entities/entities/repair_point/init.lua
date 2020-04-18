@@ -19,7 +19,7 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	print( activator:GetName() .. " has used the " .. caller:GetName() )
+	print( activator:GetName() .. " has used the " .. self:GetClass() )
 end
 
 function ENT:Think()

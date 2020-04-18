@@ -3,6 +3,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("teamsetup.lua")
 AddCSLuaFile("sounds.lua")
 AddCSLuaFile("babymanager.lua")
+AddCSLuaFile("custom_classes.lua")
 
 resource.AddFile("gamemodes/ludum/content/sound/weapons/baby/baby.wav")
 
@@ -10,6 +11,7 @@ include("shared.lua")
 include("teamsetup.lua")
 include("sounds.lua")
 include("babymanager.lua")
+include("custom_classes.lua")
 
 admiralBaby = nil
 
@@ -24,25 +26,26 @@ hook.Add("PlayerSay", "CommandIndent", function(ply, text, bteam)
 	end
 	
 	print(text)
-
-
 end)
 
+function GM:PlayerInitialSpawn( ply )
+	ply:SetupTeam(0)
+	ply:SetNWInt("PlayerClass",2)
+end
+
 function GM:PlayerSpawn( ply )
-	
-	ply:SetupTeam(math.random(0,1))
-	ply:ChatPrint("You have spawned, bruh!")
-	print ( "Player: " .. ply:Nick() .. " has spawned, dude." )
-	
-	local npc = ents.Create ( "nextbot_custom" )
-    npc:SetPos( ply:GetPos()+ Vector( -1000,0,0 ) )
-    npc:Spawn()
-	
-	ply:SetupHands()
+	ply:ChatPrint("You have spawned!")
+	print ( "Player: " .. ply:Nick() .. " has spawned." )
 	
 	SpawnRepairPoint(ply)
-
+	
+	ply:PlayerLoadout()
+	ply:PlayerSetModel()
+	ply:SetupHands()
+	
 end
+
+
 
 -- Choose the model for hands according to their player model.
 function GM:PlayerSetHandsModel( ply, ent )

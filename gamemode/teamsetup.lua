@@ -5,15 +5,13 @@ local teams = {}
 teams[0] = 
 {
 	name = "Red",
-	color = Vector(1.0,0,0),
-	weapons = { "weapon_weakcrowbar", "weapon_soldiershotgun"}
+	color = Vector(255,0,0),
 }
 
 teams[1] = 
 {
 	name = "Blue",
-	color = Vector(0,0,1.0),
-	weapons = {"weapon_weakcrowbar", "weapon_soldiershotgun"}
+	color = Vector(0,0,255),
 }
 
 
@@ -22,19 +20,22 @@ function ply:SetupTeam( n )
 	
 	self:SetTeam(n)
 	self:SetPlayerColor(teams[n].color)
-	self:SetHealth(150)
-	self:SetMaxHealth(200)
-	self:SetWalkSpeed(100)
-	self:SetRunSpeed(1000)
-	self:SetModel("models/player/Group03m/Male_0" .. math.random(1,9) .. ".mdl")
-	
-	self:GiveWeapons(n)
 end
 
-function ply:GiveWeapons(n)
-
-	for k, weapon in pairs(teams[n].weapons) do
-		self:Give(weapon)
+function ply:PlayerLoadout()
+	local plyClass = PLAYER_CLASSES[self:GetNWInt("PlayerClass")]
+	
+	for k,v in pairs(plyClass.weapons) do
+		self:Give(v)
 	end
 
+	return true
+end
+
+function ply:PlayerSetModel()
+	local plyClass = PLAYER_CLASSES[self:GetNWInt("PlayerClass")]
+	
+	self:SetModel(plyClass.model)
+
+	return true
 end
