@@ -3,6 +3,8 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
+local IsDead = false
+
 function ENT:Initialize()
 	self:SetModel( "models/props_c17/doll01.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
@@ -10,8 +12,7 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS )
 	self:SetHealth( 1000 )
 	self:SetMaxHealth(1000)
-	
-	babyHealth = self:Health()
+	IsDead = false;
 	
 	local phys = self:GetPhysicsObject()
 	if( phys:IsValid() ) then
@@ -19,15 +20,17 @@ function ENT:Initialize()
 	end
 end
 
-function ENT:Use(activator, caller)
-	print( activator:GetName() .. " has used the " .. caller:GetName() )
+function ENT:IsDead()
+	return IsDead
 end
 
 function ENT:Think()
+	local babyHealth = self:Health()
+	if(babyHealth <= 0) then return end
 	if(#player.GetHumans() == 0) then return end
 
-	local babyHealth = self:Health()
 	babyHealth = babyHealth - 1
+	self:SetHealth(babyHealth)
 	--print(babyHealth)
 	if babyHealth == self:GetMaxHealth()/2 then
 		for k, ply in pairs(player.GetAll()) do
@@ -38,7 +41,8 @@ function ENT:Think()
 		--SafeRemoveEntity( self )
 		for k, ply in pairs(player.GetAll()) do
 			ply:ChatPrint("Baby Admiral has died!")
+			IsDead = true
 		end
 	end
-	self:SetHealth(babyHealth)
+	
 end

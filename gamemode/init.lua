@@ -98,4 +98,7 @@ function SpawnAdmiralBaby()
 	print("Admiral Baby Spawned with health " .. admiralBaby:Health())
 end
 
+function GetAdmiralBaby()
+	return admiralBaby
+end
 

@@ -111,7 +111,7 @@ function SWEP:PrimaryAttack()
 		ply:SetAnimation(PLAYER_ATTACK1)
 		
 		ply:EmitSound("baby_sound")
-		ent:TakeDamage(ent:Health())
+		ent:TakeDamage(20)
 		
 		if(ent:Health() < 1) then
 			if(ent:IsPlayer()) then

@@ -2,7 +2,7 @@
 {
 	"base"			"base"
 	"title"			"Ludum"
-	"maps"			"^gm_"
+	"maps"			"gm_construct"
 	"menusystem"		"1"
 	"workshopid"		""
 	"settings"

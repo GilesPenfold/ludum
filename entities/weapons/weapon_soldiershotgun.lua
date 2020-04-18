@@ -16,7 +16,7 @@ end
 SWEP.ViewModel					=	"models/weapons/c_shotgun.mdl"
 SWEP.ViewModelFlip      = false
 SWEP.UseHands					=	true
-SWEP.WorldModel					=	"models/weapons/c_shotgun.mdl"
+SWEP.WorldModel					=	"models/weapons/w_shotgun.mdl"
 SWEP.SetHoldType				=	"shotgun"
 
 SWEP.Weight						=	5
@@ -25,7 +25,7 @@ SWEP.AutoSwitchFrom				=	false
 
 SWEP.ReloadingTime				=	1
 
-   SWEP.Slot               = 2
+SWEP.Slot  			            = 	2
 SWEP.SlotPos					=	0
 
 SWEP.DrawAmmo					=	true
@@ -37,7 +37,7 @@ SWEP.ShouldDropOnDie			=	true
 
 SWEP.Primary.ClipSize			=	6
 SWEP.Primary.ClipMax			=	24
-SWEP.Primary.DefaultClip		= 	12
+SWEP.Primary.DefaultClip		= 	6
 SWEP.Primary.Ammo				=	"Buckshot"
 SWEP.Primary.Automatic			=	false
 SWEP.Primary.Recoil				= 	8
