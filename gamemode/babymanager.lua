@@ -18,15 +18,13 @@ function SwitchBaby( ply )
 
 	if(#allPlayers == 0) then return end
 	
-	print("Number of stored weapons:" .. #storedWeapons)
-	
 	if(playerWithBaby != nil && #storedWeapons != 0) then
 		print("Stripping baby owner of baby")
 		playerWithBaby:StripWeapons()
 		local idx = 1
 		for k,v in pairs(storedWeapons) do
 			print("Giving: " .. v)
-			playerWithBaby:Give(v, false)
+			playerWithBaby:Give(v, true)
 			local wep = playerWithBaby:GetWeapon(v)
 			wep:SetClip1(storedAmmo[idx])
 			print("Ammo: " .. storedAmmo[idx])
@@ -37,7 +35,7 @@ function SwitchBaby( ply )
 	table.Empty(storedAmmo)
 	table.Empty(storedWeapons)
 	
-	if(admiralBaby:IsDead()) then return end
+	if(GetAdmiralBaby():IsDead()) then return end
 	
 	if(#allPlayers == 1) then 
 		playerWithBaby = allPlayers[1]

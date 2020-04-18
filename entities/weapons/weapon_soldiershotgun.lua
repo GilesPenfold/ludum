@@ -37,7 +37,7 @@ SWEP.ShouldDropOnDie			=	true
 
 SWEP.Primary.ClipSize			=	6
 SWEP.Primary.ClipMax			=	24
-SWEP.Primary.DefaultClip		= 	6
+SWEP.Primary.DefaultClip		= 	12
 SWEP.Primary.Ammo				=	"Buckshot"
 SWEP.Primary.Automatic			=	false
 SWEP.Primary.Recoil				= 	8

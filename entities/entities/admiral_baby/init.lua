@@ -4,14 +4,15 @@ AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
 
 local IsDead = false
+local startingHealth = 100
 
 function ENT:Initialize()
 	self:SetModel( "models/props_c17/doll01.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid( SOLID_VPHYSICS )
-	self:SetHealth( 1000 )
-	self:SetMaxHealth(1000)
+	self:SetHealth( startingHealth )
+	self:SetMaxHealth(startingHealth)
 	IsDead = false;
 	
 	local phys = self:GetPhysicsObject()
