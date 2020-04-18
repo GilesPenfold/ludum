@@ -31,6 +31,7 @@ SWEP.Primary.ClipSize			=	-1
 SWEP.Primary.DefaultClip		= 	-1
 SWEP.Primary.Ammo				=	"none"
 SWEP.Primary.Automatic			=	false
+SWEP.Primary.Delay           	=	0.5
 
 SWEP.Secondary.ClipSize			=	-1
 SWEP.Secondary.DefaultClip		= 	-1
@@ -46,9 +47,11 @@ end
 
 function SWEP:PrimaryAttack()
 
-	if(CLIENT) then return end
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay )
 
 	local ply = self:GetOwner()
+	
+	if not IsValid(ply) then return end
 
 	ply:LagCompensation(true)
 
@@ -77,9 +80,6 @@ function SWEP:PrimaryAttack()
 	
 	if(IsValid(ent) && ( ent:IsPlayer() || ent:IsNPC() ) ) then
 		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-		ply:SetAnimation(PLAYER_ATTACK1)
-		
-		ply:EmitSound(HitSound)
 		ent:TakeDamage(ent:Health())
 		
 		if(ent:Health() < 1) then
@@ -87,18 +87,19 @@ function SWEP:PrimaryAttack()
 				ent:Kill()
 			end
 		end
-
-	elseif(not IsValid(ent) ) then
-	
-		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
-		ply:SetAnimation(PLAYER_ATTACK1)
 		
-		ply:EmitSound(SwingSound)
-
+		if SERVER then
+			ply:SetAnimation(PLAYER_ATTACK1)
+			ply:EmitSound(HitSound)
+		end
+	elseif(not IsValid(ent) ) then
+		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
+		if SERVER then
+			ply:SetAnimation(PLAYER_ATTACK1)
+			ply:EmitSound(SwingSound)
+		end
 	end
 	
-	self:SetNextPrimaryFire(CurTime() + self:SequenceDuration())
-
 	ply:LagCompensation(false)
 end
 

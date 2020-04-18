@@ -30,7 +30,7 @@ end)
 
 function GM:PlayerInitialSpawn( ply )
 	ply:SetupTeam(0)
-	ply:SetNWInt("PlayerClass",2)
+	ply:SetNWInt("PlayerClass",3)
 end
 
 function GM:PlayerSpawn( ply )
