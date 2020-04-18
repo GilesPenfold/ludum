@@ -33,7 +33,9 @@ SWEP.Primary.Automatic			=	false
 SWEP.Secondary.ClipSize			=	-1
 SWEP.Secondary.DefaultClip		= 	-1
 SWEP.Secondary.Ammo				=	"none"
-SWEP.Secondary.Automatic			=	false
+SWEP.Secondary.Automatic		=	false
+
+local BabyHealth				=	1000
 
 -- Adjust these variables to move the viewmodel's position
 SWEP.IronSightsPos  = Vector(10, 20, -5)
@@ -109,12 +111,22 @@ function SWEP:PrimaryAttack()
 		ply:SetAnimation(PLAYER_ATTACK1)
 		
 		ply:EmitSound("baby_sound")
-		ent:SetHealth(ent:Health() - 1)
+		ent:TakeDamage(ent:Health())
+		
 		if(ent:Health() < 1) then
-			ent:Kill()
+			if(ent:IsPlayer()) then
+				ent:Kill()
+			end
+		end
+
+		for k,v in pairs(ents.FindByClass("admiral_baby")) do
+			local newHealth = math.Clamp(v:Health() + 20, 1, v:GetMaxHealth() )
+			print(newHealth)
+			self:CallOnClient("SetBabyHealth",newHealth)
+			v:SetHealth(newHealth)
 		end
 		
-		ply:SetHealth(math.Clamp(ply:Health() + 10, 1, ply:GetMaxHealth() ) )
+		
 		
 	elseif(not IsValid(ent) ) then
 	
@@ -133,18 +145,32 @@ function SWEP:CanSecondaryAttack()
 	return false
 end
 
-function SWEP:DrawHUD()
-
-	local vPos = ScrW()-300
-	local hPos = 50
-	
-	local width = 250
-	local height = 30
-	
-	draw.RoundedBox(10, vPos,hPos, width, height, Color(225,20,20, 150))
-	draw.RoundedBox(10, vPos,hPos, width, height, Color(225,20,20, 255))
-	
-	draw.SimpleText("Admiral's Health", "Default", vPos + 10, hPos + 3, Color(255,255,255,255), 0, 0)
+function SWEP:Think()
+	for k,v in pairs(ents.FindByClass("admiral_baby")) do
+		self:CallOnClient("SetBabyHealth",v:Health())
+	end
+	--print("Admiral's health: " .. BabyHealth)
 end
 
+function SWEP:SetBabyHealth(h)
+	BabyHealth = h
+end
+
+
+if CLIENT then
+	function SWEP:DrawHUD()
+		
+		local vPos = ScrW()-300
+		local hPos = 50
+		
+		local width = 250 
+		local totalWidth = 250 * (BabyHealth / 1000 )
+		local height = 30
+
+		draw.RoundedBox(10, vPos,hPos, width, height, Color(225,20,20, 150))
+		draw.RoundedBox(10, vPos,hPos, totalWidth, height, Color(225,20,20, 255))	
+		
+		draw.SimpleText("Admiral's Health", "Default", vPos + 10, hPos + 3, Color(255,255,255,255), 0, 0)
+	end
+end
 

@@ -25,7 +25,7 @@ SWEP.Spawnable					=	true
 SWEP.AdminSpawnable				=	true
 SWEP.ShouldDropOnDie			=	true
 
-SWEP.Damage						=	5
+SWEP.Damage						=	150
 
 SWEP.Primary.ClipSize			=	-1
 SWEP.Primary.DefaultClip		= 	-1
@@ -80,9 +80,12 @@ function SWEP:PrimaryAttack()
 		ply:SetAnimation(PLAYER_ATTACK1)
 		
 		ply:EmitSound(HitSound)
-		ent:SetHealth(ent:Health() - self.Damage)
+		ent:TakeDamage(ent:Health())
+		
 		if(ent:Health() < 1) then
-			ent:Kill()
+			if(ent:IsPlayer()) then
+				ent:Kill()
+			end
 		end
 
 	elseif(not IsValid(ent) ) then

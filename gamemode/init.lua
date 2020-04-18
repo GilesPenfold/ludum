@@ -11,9 +11,25 @@ include("teamsetup.lua")
 include("sounds.lua")
 include("babymanager.lua")
 
-function GM:PlayerSpawn( ply )
-	SpawnTimer()
+admiralBaby = nil
 
+hook.Add("PlayerSay", "CommandIndent", function(ply, text, bteam)
+
+	text = string.lower(text)
+	
+	if(text=="!start") then
+		SpawnTimer()
+		BabySwitchTimer(ply)
+		SpawnAdmiralBaby()
+	end
+	
+	print(text)
+
+
+end)
+
+function GM:PlayerSpawn( ply )
+	
 	ply:SetupTeam(math.random(0,1))
 	ply:ChatPrint("You have spawned, bruh!")
 	print ( "Player: " .. ply:Nick() .. " has spawned, dude." )
@@ -23,8 +39,9 @@ function GM:PlayerSpawn( ply )
     npc:Spawn()
 	
 	ply:SetupHands()
-	BabySwitchTimer(ply)
+	
 	SpawnRepairPoint(ply)
+
 end
 
 -- Choose the model for hands according to their player model.
@@ -48,7 +65,7 @@ function SpawnTimer()
             if( #ZombiesInScene > 10 ) then
                 return
             else
-                --SpawnZombie()
+                SpawnZombie()
             end
         end)
     end
@@ -74,5 +91,11 @@ function SpawnRepairPoint(p)
     repairPoint:Spawn()
 end
 
+function SpawnAdmiralBaby()
+    admiralBaby = ents.Create("admiral_baby")
+    admiralBaby:SetPos(Vector( 0,0,-1000 ))
+    admiralBaby:Spawn()
+	print("Admiral Baby Spawned with health " .. admiralBaby:Health())
+end
 
 
