@@ -6,14 +6,14 @@ teams[0] =
 {
 	name = "Red",
 	color = Vector(1.0,0,0),
-	weapons = { "weapon_weakcrowbar", "weapon_soldiershotgun", "weapon_357"}
+	weapons = { "weapon_weakcrowbar", "weapon_soldiershotgun"}
 }
 
 teams[1] = 
 {
 	name = "Blue",
 	color = Vector(0,0,1.0),
-	weapons = {"weapon_weakcrowbar", "weapon_soldiershotgun", "weapon_357"}
+	weapons = {"weapon_weakcrowbar", "weapon_soldiershotgun"}
 }
 
 

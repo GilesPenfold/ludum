@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Author 					=	"Giles"
 SWEP.Base						=	"weapon_base"
-SWEP.PrintName					=	"Vamp Crowbar"
+SWEP.PrintName					=	"Admiral Baby"
 SWEP.Instructions				=	[[LeftClick: Hit thing.]]
 
 SWEP.ViewModel 					= 	"models/props_c17/doll01.mdl"
@@ -15,7 +15,7 @@ SWEP.Weight						=	5
 SWEP.AutoSwitchTo				=	true
 SWEP.AutoSwitchFrom				=	false
 
-SWEP.Slot						= 	0
+SWEP.Slot						= 	4
 SWEP.SlotPos					=	0
 
 SWEP.DrawAmmo					=	false
@@ -66,8 +66,8 @@ function SWEP:GetViewModelPosition(EyePos, EyeAng)
 end
 
 
-local SwingSound				=	Sound("Weapon_Crowbar.Single")
-local HitSound					=	Sound("Weapon_Crowbar.Melee_Hit")
+local SwingSound				=	Sound("baby_sound")--Sound("Weapon_Crowbar.Single")
+local HitSound					=	Sound("baby_sound")--Sound("Weapon_Crowbar.Melee_Hit")
 
 function SWEP:Initialize()
 	self:SetHoldType("melee")
@@ -108,7 +108,7 @@ function SWEP:PrimaryAttack()
 		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
 		ply:SetAnimation(PLAYER_ATTACK1)
 		
-		ply:EmitSound(HitSound)
+		ply:EmitSound("baby_sound")
 		ent:SetHealth(ent:Health() - 1)
 		if(ent:Health() < 1) then
 			ent:Kill()
@@ -121,7 +121,7 @@ function SWEP:PrimaryAttack()
 		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
 		ply:SetAnimation(PLAYER_ATTACK1)
 		
-		ply:EmitSound(SwingSound)
+		ply:EmitSound("baby_sound")
 	end
 	
 	self:SetNextPrimaryFire(CurTime() + self:SequenceDuration() + 0.1)
@@ -132,4 +132,19 @@ end
 function SWEP:CanSecondaryAttack()
 	return false
 end
+
+function SWEP:DrawHUD()
+
+	local vPos = ScrW()-300
+	local hPos = 50
+	
+	local width = 250
+	local height = 30
+	
+	draw.RoundedBox(10, vPos,hPos, width, height, Color(225,20,20, 150))
+	draw.RoundedBox(10, vPos,hPos, width, height, Color(225,20,20, 255))
+	
+	draw.SimpleText("Admiral's Health", "Default", vPos + 10, hPos + 3, Color(255,255,255,255), 0, 0)
+end
+
 
