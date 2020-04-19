@@ -2,6 +2,7 @@ local ply = FindMetaTable("Player")
 
 local teams = {}
 
+
 teams[0] = 
 {
 	name = "Red",
@@ -55,4 +56,3 @@ end
 function ply:SetNewClass(class)
 	self:SetNWInt("PlayerClass", class)
 end
-

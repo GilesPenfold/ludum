@@ -3,15 +3,29 @@ include("sounds.lua")
 
 local g_station = nil
 local g_alarm = nil
+local wave = Material( "pp/blury", "noclamp smooth" )
 
 function GM:HUDPaint()
 
 	local subFlooding = 1
+	local waterLevel = Vector(0,0,-1000)
 
 	for k,v in pairs(ents.FindByClass("submarine")) do
 		subFlooding = v:GetSubmarineFlooding()
+		waterLevel = v:GetWaterLevel()
 	end
-
+	
+	print(waterLevel.z)
+	print(LocalPlayer():GetPos().z)
+	
+	if((LocalPlayer():GetPos().z - 310) < waterLevel.z) then
+		
+		surface.SetMaterial( wave )
+		surface.SetDrawColor( 30, 30, 51, 255 )
+		surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() )
+		draw.RoundedBox(0, 0,0, ScrW(), ScrH(), Color(30,30,51, 240))
+	end
+	
 	local vPos = ScrW()-450
 	local hPos = 50
 	

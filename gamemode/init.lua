@@ -28,7 +28,7 @@ submarine = nil
 local g_station = nil
 
 function StartGame()
-	
+	print("starting game")
 	SpawnTimer()
 	BabySwitchTimer(ply)
 	SpawnSubmarineEntity()
@@ -68,7 +68,7 @@ function StopGame()
 	timer.Remove("musicTimer")
 	timer.Remove("alarmTimer")
 	
-	for k,v in pairs(player.GetHumans()) do
+	for k,ply in pairs(player.GetHumans()) do
 		net.Start("musicstop")
 		net.Send( ply )
 		net.Start("alarmstop")
@@ -84,8 +84,7 @@ end
 function GM:PlayerSpawn( ply )	
 
 	if(IsRoundActive()) then
-	
-		
+
 		if(ply:GetLoadoutName() == "Engineer") then
 			ply:ChatPrint("You are an " .. ply:GetLoadoutName() .. "!" )
 			ply:ChatPrint("Find repair points around the map and repair them with your crowbar.","(Press E to interact whilst holding the crowbar). "  )
@@ -148,6 +147,7 @@ end
 
 function SpawnSubmarineEntity()
     submarine = ents.Create("submarine")
+	print(submarine:GetClass())
     submarine:SetPos(Vector( 0,0,-1000 ))
     submarine:Spawn()
 	print("Submarine Spawned with health " .. submarine:Health())
@@ -160,4 +160,10 @@ end
 function GM:Think()
 	EndRoundCheck()
 	SubmarineFlood(submarine)
+end
+
+function GM:PlayerHurt( victim,  attacker,  healthRemaining,  damageTaken )
+	if(victim:GetActiveWeapon():GetClass() == "weapon_vampiricbaby") then
+		print("Admiral hit!")
+	end
 end

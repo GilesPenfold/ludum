@@ -99,7 +99,7 @@ function EndRound(victory)
 				ply:SetupTeam(ply:Team())
 			end
 			if(IsValid(GetSubmarine())) then
-				GetSubmarine():Remove()
+				GetSubmarine():ResetSubmarine()
 			end
 			DestroyRepairPoints()
 			roundActive = false

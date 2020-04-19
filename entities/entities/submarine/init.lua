@@ -27,22 +27,24 @@ function ENT:UpdateTransmitState()
 end
 
 function ENT:Think()
-	local submarineHealth = self:Health()
-	if(submarineHealth >= 1000) then return end
+
+	if(self:GetIsFlooded()) then return end
 	if(#player.GetHumans() == 0) then return end
 
-	submarineHealth = submarineHealth + 1
-	self:SetHealth(submarineHealth)
-	if submarineHealth == self:GetMaxHealth()/2 then
-		for k, ply in pairs(player.GetAll()) do
-			ply:ChatPrint("Submarine is half flooded!")
-		end
-	end
-	if submarineHealth <= 0 then
+	local submarineHealth = self:GetSubmarineFlooding()
+	if submarineHealth >= maxFlooding then
 		for k, ply in pairs(player.GetAll()) do
 			ply:ChatPrint("The submarine has flooded!")
 			self:SetIsFlooded(true)
 		end
 	end
+	
+end
+
+function ENT:ResetSubmarine()
+
+	self:SetSubmarineFlooding(1)
+	self:SetIsFlooded(false)
+	self:SetWaterLevel(Vector(0,0,-1000))
 	
 end

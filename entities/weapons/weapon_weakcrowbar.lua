@@ -92,6 +92,8 @@ function SWEP:PrimaryAttack()
 			ply:SetAnimation(PLAYER_ATTACK1)
 			ply:EmitSound(HitSound)
 		end
+	elseif(IsValid(ent) && ent:GetClass() == "repair_point") then
+		ent:Use(ply, ply)
 	elseif(not IsValid(ent) ) then
 		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
 		if SERVER then

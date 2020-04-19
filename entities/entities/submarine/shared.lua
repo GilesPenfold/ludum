@@ -16,10 +16,12 @@ function ENT:SetupDataTables()
  
  	self:NetworkVar( "Int", 0, "SubmarineFlooding" )
 	self:NetworkVar( "Bool", 0, "IsFlooded" )
+	self:NetworkVar( "Vector", 0, "WaterLevel" )
 	
 	if(SERVER) then
 		self:SetSubmarineFlooding(1)
 		self:SetIsFlooded(false)
+		self:SetWaterLevel(Vector(0,0,-1000))
 	end
  
  end
