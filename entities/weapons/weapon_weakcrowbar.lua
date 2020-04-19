@@ -80,7 +80,7 @@ function SWEP:PrimaryAttack()
 	
 	if(IsValid(ent) && ( ent:IsPlayer() || ent:IsNPC() ) ) then
 		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-		ent:TakeDamage(ent:Health())
+		ent:TakeDamage(2)
 		
 		if(ent:Health() < 1) then
 			if(ent:IsPlayer()) then

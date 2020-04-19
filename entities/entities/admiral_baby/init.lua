@@ -4,7 +4,7 @@ AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
 
 local IsDead = false
-local startingHealth = 100
+local startingHealth = 1000
 
 function ENT:Initialize()
 	self:SetModel( "models/props_c17/doll01.mdl" )

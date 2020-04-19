@@ -14,6 +14,7 @@ include("sounds.lua")
 include("babymanager.lua")
 include("custom_classes.lua")
 include("roundsystem.lua")
+include("ZombieSpawner.lua")
 
 admiralBaby = nil
 
@@ -21,6 +22,7 @@ function StartGame()
 	SpawnTimer()
 	BabySwitchTimer(ply)
 	SpawnAdmiralBaby()
+	Interactions()
 end
 
 function GM:PlayerInitialSpawn( ply )
@@ -63,38 +65,23 @@ function GM:PlayerSetHandsModel( ply, ent )
 
 end
 
-ZombiesInScene = {}
+function Interactions()
 
-function SpawnTimer()
-    if( !timer.Exists( "SpawnTimer" ) ) then
-        timer.Create( "SpawnTimer",2,0,function() 
-            if( #ZombiesInScene > 10 ) then
-                return
-            else
-                SpawnZombie()
-            end
-        end)
-    end
-end
-
-function SpawnZombie()
-    -- TODO replace below Vectors with GetPos() on "spawn point" entities
-    local SpawnPoints = {
-        Vector(0,0,50),
-        Vector(0,0,20),
-        Vector(50,0,0),
-        Vector(50,0,0)}
-
-    local npc = ents.Create( "npc_zombie" )
-    table.insert(ZombiesInScene,npc)
-    npc:SetPos(SpawnPoints[math.random(1,#SpawnPoints)])
-    npc:Spawn()
-end
-
-function SpawnRepairPoint(p)
-    local repairPoint = ents.Create("repair_point")
-    repairPoint:SetPos(p:GetPos() + Vector( 0,80,0 ))
-    repairPoint:Spawn()
+	entityTable = ents.FindByClass( "logic_timer" )
+	
+	for k,v in pairs(entityTable) do	
+		if k == 1 then
+			local AmmoCrate = ents.Create("ammo_crate")
+			AmmoCrate:SetPos(v:GetPos())
+			AmmoCrate:SetAngles(Angle(0,90,0))
+			AmmoCrate:Spawn()
+		elseif (k > 1) && (k < #entityTable) then
+			local RepairPoint = ents.Create("repair_point")
+			RepairPoint:SetPos(v:GetPos())
+			RepairPoint:SetAngles(Angle(0,90,0))
+			RepairPoint:Spawn()
+		end
+	end
 end
 
 function SpawnAdmiralBaby()

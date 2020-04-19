@@ -23,12 +23,12 @@ function StartRound()
 				
 				for k,ply in pairs(player.GetAll()) do
 					ply:KillSilent()
-					ply:Spawn()
 					local class = 2
 					if(soldierIndex == currentIndex) then
 						class = 3
 					end
 					ply:SetNewClass(class)
+					ply:Spawn()
 					ply:SetupForNewRound( )
 					ply:ChatPrint("Submarine Ludum is sinking, the Admiral has been turned into a baby, and zombies are trying to consume our squishy brains! What a terrible day!")
 					ply:ChatPrint("Keep Admiral Baby alive whilst repairing the submarine and defending yourselves from the zombies.")

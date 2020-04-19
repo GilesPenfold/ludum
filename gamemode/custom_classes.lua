@@ -23,7 +23,7 @@ PLAYER_CLASSES = {
 		health = 100,
 		walkspeed = 200,
 		runspeed = 400,
-		weapons = {"weapon_weakcrowbar", "weapon_soldiershotgun"},
+		weapons = {"weapon_soldiershotgun"},
 		model = "models/player/Group03m/Male_0" .. math.random(1,9) .. ".mdl"
 	}
 }
