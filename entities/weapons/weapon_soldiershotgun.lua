@@ -33,7 +33,7 @@ SWEP.DrawCrosshair				=	true
 
 SWEP.Spawnable					=	true
 SWEP.AdminSpawnable				=	true
-SWEP.ShouldDropOnDie			=	true
+SWEP.ShouldDropOnDie			=	false
 
 SWEP.Primary.ClipSize			=	6
 SWEP.Primary.ClipMax			=	24

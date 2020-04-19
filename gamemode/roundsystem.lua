@@ -100,6 +100,7 @@ function EndRound(victory)
 			if(IsValid(GetSubmarine())) then
 				GetSubmarine():Remove()
 			end
+			DestroyRepairPoints()
 			roundActive = false
 		end)
 	end
@@ -109,6 +110,3 @@ function IsRoundActive()
 	return roundActive
 end
 
-function GM:Think()
-	EndRoundCheck()
-end

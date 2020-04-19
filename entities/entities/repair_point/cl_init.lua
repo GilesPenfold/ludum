@@ -29,6 +29,7 @@ function ENT:Draw()
 	local entityDurability = self:GetEntityDurability()
 	local dangerZone = self:GetRepairPointDangerZone()
 	local capped = self:GetCapped()
+	local broken = self:GetBroken()
 	
 	local danger = false
 	if(entityDurability < dangerZone) then
@@ -46,6 +47,13 @@ function ENT:Draw()
 		Draw3DText( pos, ang, 0.2, text, false, 0, 255, 0 )
 		-- DrawDraw3DTextback
 		Draw3DText( pos, ang, 0.2, text, true, 0, 255, 0 )
+	elseif(broken) then
+		
+		text = "BROKEN"
+		-- Draw front
+		Draw3DText( pos, ang, 0.2, text, false, 255, 0, 0 )
+		-- DrawDraw3DTextback
+		Draw3DText( pos, ang, 0.2, text, true, 255, 0, 0 )
 	else
 	
 		local red = 0
@@ -54,7 +62,7 @@ function ENT:Draw()
 		
 		if(danger) then
 			red = 255
-			green = 0
+			green = 140
 			blue = 0
 		end
 		

@@ -11,6 +11,7 @@ function ENT:Initialize()
 	self:SetHealth( 100 )
 	
 	self:AddEFlags( EFL_FORCE_CHECK_TRANSMIT )
+
 	
 	local phys = self:GetPhysicsObject()
 	if( phys:IsValid() ) then
@@ -23,10 +24,9 @@ function ENT:UpdateTransmitState()
 end
 
 function ENT:Use(activator, caller)
-	if(activator:GetActiveWeapon():GetClass() == "weapon_vampiricbaby" && !self:GetCapped()) then
-	
-		if( !timer.Exists( "entityInteractTimer" ) ) then
-			timer.Create( "entityInteractTimer",1,1,function()			
+	if(activator:GetActiveWeapon():GetClass() == "weapon_vampiricbaby" && !self:GetCapped() && !self:GetBroken()) then
+		if( !timer.Exists( "entityInteractTimer" .. self:GetIdentifier() ) ) then
+			timer.Create( "entityInteractTimer" .. self:GetIdentifier() ,0.2,1,function()			
 				local entDur = self:GetEntityDurability()
 				self:SetEntityDurability(math.Clamp(entDur + 1, 0, 100))
 				entDur = self:GetEntityDurability()
@@ -35,8 +35,9 @@ function ENT:Use(activator, caller)
 				if(entDur >= self:GetRepairPointMaxHealth()) then
 					self:SetCapped(true)
 					print("Repair point has been capped.")
-					if( !timer.Exists( "entityCappedTimer" ) ) then
-						timer.Create( "entityTimer",10,1,function() 
+					if( !timer.Exists( "entityCappedTimer" .. self:GetIdentifier()  ) ) then
+						timer.Create( "entityCappedTimer" .. self:GetIdentifier(), math.random(8,16),1,function()
+							print("entityCappedTimer" .. self:GetIdentifier() .. "uncapping")
 							self:SetCapped(false)
 						end)
 					end
@@ -48,10 +49,23 @@ end
 
 
 function ENT:Think()
-	if( !timer.Exists( "entityTimer" ) ) then
-		timer.Create( "entityTimer",math.random(2,4),1,function() 
-			local entDur = self:GetEntityDurability()
-			self:SetEntityDurability(math.Clamp(entDur - 1, 0, 100))
+	if( !timer.Exists( "entityTimer".. self:GetIdentifier() ) ) then
+		timer.Create( "entityTimer".. self:GetIdentifier(),math.random(2,5),1,function()
+			if(!IsValid(self)) then return end
+			if(!self:GetCapped()) then
+				local entDur = self:GetEntityDurability()
+				
+				local numPlayers = #player.GetHumans()
+				local minReduction = numPlayers
+				local maxReduction = (numPlayers * 2) - 1
+				
+				self:SetEntityDurability(math.Clamp(entDur - math.random(minReduction,maxReduction), 0, 100))
+				
+				if(self:GetEntityDurability() <= 0) then
+					self:SetBroken(true)
+					self:Ignite(1000,200)
+				end
+			end
 		end)
 	end
 	

@@ -5,7 +5,6 @@ local storedAmmo = {}
 
 TimeToBabySwap = 5
 
-
 function BabySwitchTimer(ply)
     if( !timer.Exists( "BabySwitchTimer" ) ) then
         timer.Create( "BabySwitchTimer",TimeToBabySwap,0,function() 
@@ -31,7 +30,7 @@ function SwitchBaby( ply )
 			--print("Giving: " .. v)
 			playerWithBaby:Give(v, true)
 			local wep = playerWithBaby:GetWeapon(v)
-			wep:SetClip1(storedAmmo[idx])
+			wep:SetClip1(storedAmmo[idx]) -- probably can use k here?
 			--print("Ammo: " .. storedAmmo[idx])
 			idx = idx + 1 -- kill me
 		end

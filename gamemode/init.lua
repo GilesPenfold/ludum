@@ -3,6 +3,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("teamsetup.lua")
 AddCSLuaFile("sounds.lua")
 AddCSLuaFile("babymanager.lua")
+AddCSLuaFile("submarinemanager.lua")
 AddCSLuaFile("roundsystem.lua")
 AddCSLuaFile("custom_classes.lua")
 
@@ -12,11 +13,10 @@ include("shared.lua")
 include("teamsetup.lua")
 include("sounds.lua")
 include("babymanager.lua")
+include("submarinemanager.lua")
 include("custom_classes.lua")
 include("roundsystem.lua")
 include("ZombieSpawner.lua")
-
-util.AddNetworkString( "PlayerSpawn" )
 
 submarine = nil
 
@@ -25,6 +25,7 @@ function StartGame()
 	BabySwitchTimer(ply)
 	SpawnSubmarineEntity()
 	Interactions()
+	SetupSubmarine()
 end
 
 function GM:PlayerInitialSpawn( ply )
@@ -87,7 +88,9 @@ function Interactions()
 			local RepairPoint = ents.Create("repair_point")
 			RepairPoint:SetPos(v:GetPos())
 			RepairPoint:SetAngles(Angle(0,90,0))
+			RepairPoint:SetIdentifier(k)
 			RepairPoint:Spawn()
+			print("Spawning repair point: " .. k )
 		end
 	end
 end
@@ -103,3 +106,7 @@ function GetSubmarine()
 	return submarine
 end
 
+function GM:Think()
+	EndRoundCheck()
+	SubmarineFlood(submarine)
+end
