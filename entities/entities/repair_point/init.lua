@@ -56,7 +56,7 @@ function ENT:Think()
 				local entDur = self:GetEntityDurability()
 				
 				local numPlayers = #player.GetHumans()
-				local minReduction = numPlayers
+				local minReduction = numPlayers + 1
 				local maxReduction = (numPlayers * 2) - 1
 				
 				self:SetEntityDurability(math.Clamp(entDur - math.random(minReduction,maxReduction), 0, 100))
