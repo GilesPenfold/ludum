@@ -3,16 +3,21 @@ local playerWithBaby = nil
 local storedWeapons = {}
 local storedAmmo = {}
 
+TimeToBabySwap = 5
+
 
 function BabySwitchTimer(ply)
     if( !timer.Exists( "BabySwitchTimer" ) ) then
-        timer.Create( "BabySwitchTimer",5,0,function() 
+        timer.Create( "BabySwitchTimer",TimeToBabySwap,0,function() 
             SwitchBaby(ply)
         end)
     end
 end
 
 function SwitchBaby( ply )
+	
+	if(!IsRoundActive()) then return end
+	if(!IsValid(GetAdmiralBaby())) then return end
 	
 	local allPlayers = player.GetHumans()
 
@@ -40,7 +45,6 @@ function SwitchBaby( ply )
 	if(#allPlayers == 1) then 
 		playerWithBaby = allPlayers[1]
 	end
-
 	
 	if(#allPlayers > 1) then
 		local hasGivenToNewPlayer = false
@@ -76,6 +80,9 @@ function SwitchBaby( ply )
 		playerWithBaby:SelectWeapon("weapon_vampiricbaby")
 	end
 	
-	print( "BabySpawnTimer: Switching baby to " .. playerWithBaby:GetName() )
-	ply:ChatPrint(playerWithBaby:GetName() .. " has Admiral Baby!")
+	for k,ply in pairs(allPlayers) do
+		if(playerWithBaby != nil) then
+			ply:ChatPrint(playerWithBaby:GetName() .. " has Admiral Baby!")
+		end
+	end
 end

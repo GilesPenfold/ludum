@@ -3,6 +3,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("teamsetup.lua")
 AddCSLuaFile("sounds.lua")
 AddCSLuaFile("babymanager.lua")
+AddCSLuaFile("roundsystem.lua")
 AddCSLuaFile("custom_classes.lua")
 
 resource.AddFile("gamemodes/ludum/content/sound/weapons/baby/baby.wav")
@@ -12,39 +13,40 @@ include("teamsetup.lua")
 include("sounds.lua")
 include("babymanager.lua")
 include("custom_classes.lua")
+include("roundsystem.lua")
 
 admiralBaby = nil
 
-hook.Add("PlayerSay", "CommandIndent", function(ply, text, bteam)
-
-	text = string.lower(text)
-	
-	if(text=="!start") then
-		SpawnTimer()
-		BabySwitchTimer(ply)
-		SpawnAdmiralBaby()
-	end
-	
-	print(text)
-end)
+function StartGame()
+	SpawnTimer()
+	BabySwitchTimer(ply)
+	SpawnAdmiralBaby()
+end
 
 function GM:PlayerInitialSpawn( ply )
 	ply:SetupTeam(0)
 	ply:SetNWInt("PlayerClass",3)
 end
 
-function GM:PlayerSpawn( ply )
-	ply:ChatPrint("You have spawned!")
-	print ( "Player: " .. ply:Nick() .. " has spawned." )
-	
-	SpawnRepairPoint(ply)
-	
-	ply:PlayerLoadout()
-	ply:PlayerSetModel()
-	ply:SetupHands()
-	
+function GM:PlayerSpawn( ply )	
+	if(IsRoundActive()) then
+		ply:PlayerLoadout()
+		ply:PlayerSetModel()
+		ply:SetupHands()
+		ply:ChatPrint("You have spawned!")
+		print ( "Player: " .. ply:Nick() .. " has spawned as an " .. ply:GetLoadoutName() )
+	else
+		StartRound()
+	end
 end
 
+function GM:PlayerDeath(ply)
+	if(IsRoundActive()) then
+		timer.Create("spawntimer", 5, 1, function()
+			ply:Spawn()
+		end)
+	end
+end
 
 
 -- Choose the model for hands according to their player model.

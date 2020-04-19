@@ -39,3 +39,8 @@ function ply:PlayerSetModel()
 
 	return true
 end
+
+function ply:GetLoadoutName()
+	local plyClass = PLAYER_CLASSES[self:GetNWInt("PlayerClass")]
+	return plyClass.name
+end
