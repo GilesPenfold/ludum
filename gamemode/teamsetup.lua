@@ -14,7 +14,7 @@ teams[1] =
 	color = Vector(0,0,255),
 }
 
-
+	
 function ply:SetupTeam( n )
 	if(not teams[n]) then return end
 	

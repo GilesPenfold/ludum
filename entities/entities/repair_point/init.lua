@@ -8,7 +8,7 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid( SOLID_VPHYSICS )
-	self:SetHealth( RepairPointMaxHealth )
+	self:SetHealth( 100 )
 	
 	self:AddEFlags( EFL_FORCE_CHECK_TRANSMIT )
 	

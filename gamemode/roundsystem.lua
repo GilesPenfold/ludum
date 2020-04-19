@@ -10,11 +10,12 @@ function StartRound()
 	
 	if(alive >= #player.GetAll() && #player.GetAll() >= 1) then
 		for k,ply in pairs(player.GetAll()) do
-			ply:ChatPrint("Round begins in 3 seconds.")
+			ply:ChatPrint("You find yourself stranded in the middle of the Pacific Ocean, upon the sinking submarine Ludum. The Admiral has been turned into a baby, and zombies are trying to consume your squishy brains! What a terrible day!")
+			ply:ChatPrint("Round begins in 15 seconds.")
 		end
 		
 		if( !timer.Exists( "RoundStartTimer" ) ) then
-			timer.Create( "RoundStartTimer",3,1,function() 
+			timer.Create( "RoundStartTimer",15,1,function() 
 				roundActive = true
 				roundTimer = 300
 				
@@ -30,8 +31,6 @@ function StartRound()
 					ply:SetNewClass(class)
 					ply:Spawn()
 					ply:SetupForNewRound( )
-					ply:ChatPrint("Submarine Ludum is sinking, the Admiral has been turned into a baby, and zombies are trying to consume our squishy brains! What a terrible day!")
-					ply:ChatPrint("Keep Admiral Baby alive whilst repairing the submarine and defending yourselves from the zombies.")
 				end
 				StartGame()
 			end)
@@ -54,16 +53,20 @@ end
 function EndRoundCheck()
 	
 	if(!roundActive) then return end
-	if(!IsValid(GetAdmiralBaby())) then return end
+	if(!IsValid(GetSubmarine())) then return end
 	
 	if( !timer.Exists( "delayTimer" ) ) then
 		timer.Create("delayTimer", 1, 1, function()
-			if(!IsValid(GetAdmiralBaby())) then return end
-			if(GetAdmiralBaby():IsDead()) then
+			if(!IsValid(GetSubmarine())) then return end
+			
+			if(#player.GetHumans() == 0) then
+				EndRound(false) -- failure
+			end
+			
+			if(GetSubmarine():IsDead()) then
 				EndRound(false) -- failure
 			end
 			roundTimer = roundTimer - 1
-			
 			if(roundTimer == 0) then
 				EndRound(true) -- victory
 			end
@@ -94,8 +97,8 @@ function EndRound(victory)
 				end
 				ply:SetupTeam(ply:Team())
 			end
-			if(IsValid(GetAdmiralBaby())) then
-				GetAdmiralBaby():Remove()
+			if(IsValid(GetSubmarine())) then
+				GetSubmarine():Remove()
 			end
 			roundActive = false
 		end)

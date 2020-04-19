@@ -17,22 +17,22 @@ end
 function SwitchBaby( ply )
 	
 	if(!IsRoundActive()) then return end
-	if(!IsValid(GetAdmiralBaby())) then return end
+	if(!IsValid(GetSubmarine())) then return end
 	
 	local allPlayers = player.GetHumans()
 
 	if(#allPlayers == 0) then return end
 	
 	if(playerWithBaby != nil && #storedWeapons != 0) then
-		print("Stripping baby owner of baby")
+		--print("Stripping baby owner of baby")
 		playerWithBaby:StripWeapons()
 		local idx = 1
 		for k,v in pairs(storedWeapons) do
-			print("Giving: " .. v)
+			--print("Giving: " .. v)
 			playerWithBaby:Give(v, true)
 			local wep = playerWithBaby:GetWeapon(v)
 			wep:SetClip1(storedAmmo[idx])
-			print("Ammo: " .. storedAmmo[idx])
+			--print("Ammo: " .. storedAmmo[idx])
 			idx = idx + 1 -- kill me
 		end
 	end
@@ -40,7 +40,7 @@ function SwitchBaby( ply )
 	table.Empty(storedAmmo)
 	table.Empty(storedWeapons)
 	
-	if(GetAdmiralBaby():IsDead()) then return end
+	if(GetSubmarine():IsDead()) then return end
 	
 	if(#allPlayers == 1) then 
 		playerWithBaby = allPlayers[1]
@@ -57,7 +57,7 @@ function SwitchBaby( ply )
 				for k,v in pairs(weps) do
 					table.insert(storedWeapons, idx, v:GetClass())
 					table.insert(storedAmmo, idx, v:Clip1())
-					print("Inserting: " .. v:GetClass() .. " with " .. v:Clip1() .. " ammo.")
+					--print("Inserting: " .. v:GetClass() .. " with " .. v:Clip1() .. " ammo.")
 					idx = idx + 1
 				end
 				randomply:StripWeapons()
@@ -72,7 +72,7 @@ function SwitchBaby( ply )
 		for k,v in pairs(weps) do
 			table.insert(storedWeapons, idx, v:GetClass())
 			table.insert(storedAmmo, idx, v:Clip1())
-			print("Inserting: " .. v:GetClass() .. " with " .. v:Clip1() .. " ammo.")
+			--print("Inserting: " .. v:GetClass() .. " with " .. v:Clip1() .. " ammo.")
 			idx = idx + 1
 		end		
 		playerWithBaby:StripWeapons()

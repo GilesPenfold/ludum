@@ -4,16 +4,19 @@ AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
 
 local IsDead = false
-local startingHealth = 1000
+local startingFlooding = 1
+local maxFlooding = 1000
 
 function ENT:Initialize()
 	self:SetModel( "models/props_c17/doll01.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid( SOLID_VPHYSICS )
-	self:SetHealth( startingHealth )
-	self:SetMaxHealth(startingHealth)
+	self:SetHealth( startingFlooding )
+	self:SetMaxHealth(startingFlooding)
 	IsDead = false;
+	
+	self:AddEFlags( EFL_FORCE_CHECK_TRANSMIT )
 	
 	local phys = self:GetPhysicsObject()
 	if( phys:IsValid() ) then
@@ -21,27 +24,29 @@ function ENT:Initialize()
 	end
 end
 
+function ENT:UpdateTransmitState()	
+	return TRANSMIT_ALWAYS 
+end
+
 function ENT:IsDead()
 	return IsDead
 end
 
 function ENT:Think()
-	local babyHealth = self:Health()
-	if(babyHealth <= 0) then return end
+	local submarineHealth = self:Health()
+	if(submarineHealth >= 1000) then return end
 	if(#player.GetHumans() == 0) then return end
 
-	babyHealth = babyHealth - 1
-	self:SetHealth(babyHealth)
-	--print(babyHealth)
-	if babyHealth == self:GetMaxHealth()/2 then
+	submarineHealth = submarineHealth + 1
+	self:SetHealth(submarineHealth)
+	if submarineHealth == self:GetMaxHealth()/2 then
 		for k, ply in pairs(player.GetAll()) do
-			ply:ChatPrint("Baby Admiral is at half health!")
+			ply:ChatPrint("Submarine is half flooded!")
 		end
 	end
-	if babyHealth <= 0 then
-		--SafeRemoveEntity( self )
+	if submarineHealth <= 0 then
 		for k, ply in pairs(player.GetAll()) do
-			ply:ChatPrint("Baby Admiral has died!")
+			ply:ChatPrint("The submarine has flooded!")
 			IsDead = true
 		end
 	end

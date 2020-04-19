@@ -119,7 +119,7 @@ function SWEP:PrimaryAttack()
 			end
 		end
 
-		for k,v in pairs(ents.FindByClass("admiral_baby")) do
+		for k,v in pairs(ents.FindByClass("submarine")) do
 			local newHealth = math.Clamp(v:Health() + 20, 1, v:GetMaxHealth() )
 			print(newHealth)
 			self:CallOnClient("SetBabyHealth",newHealth)
@@ -146,7 +146,7 @@ function SWEP:CanSecondaryAttack()
 end
 
 function SWEP:Think()
-	for k,v in pairs(ents.FindByClass("admiral_baby")) do
+	for k,v in pairs(ents.FindByClass("submarine")) do
 		self:CallOnClient("SetBabyHealth",v:Health())
 	end
 	--print("Admiral's health: " .. BabyHealth)
@@ -167,10 +167,10 @@ if CLIENT then
 		local totalWidth = 250 * (BabyHealth / 1000 )
 		local height = 30
 
-		draw.RoundedBox(10, vPos,hPos, width, height, Color(225,20,20, 150))
-		draw.RoundedBox(10, vPos,hPos, totalWidth, height, Color(225,20,20, 255))	
+		--draw.RoundedBox(10, vPos,hPos, width, height, Color(225,20,20, 150))
+		--draw.RoundedBox(10, vPos,hPos, totalWidth, height, Color(225,20,20, 255))	
 		
-		draw.SimpleText("Admiral's Health", "Default", vPos + 10, hPos + 3, Color(255,255,255,255), 0, 0)
+		--draw.SimpleText("Admiral's Health", "Default", vPos + 10, hPos + 3, Color(255,255,255,255), 0, 0)
 	end
 end
 

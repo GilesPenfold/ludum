@@ -16,12 +16,14 @@ include("custom_classes.lua")
 include("roundsystem.lua")
 include("ZombieSpawner.lua")
 
-admiralBaby = nil
+util.AddNetworkString( "PlayerSpawn" )
+
+submarine = nil
 
 function StartGame()
 	SpawnTimer()
 	BabySwitchTimer(ply)
-	SpawnAdmiralBaby()
+	SpawnSubmarineEntity()
 	Interactions()
 end
 
@@ -32,7 +34,13 @@ end
 
 function GM:PlayerSpawn( ply )	
 	if(IsRoundActive()) then
-		ply:ChatPrint("You have spawned as: " .. ply:GetLoadoutName())
+		if(ply:GetLoadoutName() == "Engineer") then
+			ply:ChatPrint("You are an " .. ply:GetLoadoutName() .. "!" )
+			ply:ChatPrint("Find repair points around the map and repair them with your crowbar.","(Press E to interact whilst holding the crowbar). "  )
+		elseif(ply:GetLoadoutName() == "Soldier") then
+			ply:ChatPrint("You are a ".. ply:GetLoadoutName() .. "!" )
+			ply:ChatPrint("You are this submarines last bastion of hope against the zombies. Use your shotgun to kill zombies and protect the Engineers."  )
+		end
 		print ( "Player: " .. ply:Nick() .. " has spawned as an " .. ply:GetLoadoutName() )
 	else
 		StartRound()
@@ -84,14 +92,14 @@ function Interactions()
 	end
 end
 
-function SpawnAdmiralBaby()
-    admiralBaby = ents.Create("admiral_baby")
-    admiralBaby:SetPos(Vector( 0,0,-1000 ))
-    admiralBaby:Spawn()
-	print("Admiral Baby Spawned with health " .. admiralBaby:Health())
+function SpawnSubmarineEntity()
+    submarine = ents.Create("submarine")
+    submarine:SetPos(Vector( 0,0,-1000 ))
+    submarine:Spawn()
+	print("Submarine Spawned with health " .. submarine:Health())
 end
 
-function GetAdmiralBaby()
-	return admiralBaby
+function GetSubmarine()
+	return submarine
 end
 
