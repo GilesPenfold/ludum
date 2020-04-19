@@ -178,6 +178,16 @@ function GetAdmiral()
 end
 
 function GM:Think()
+	if(IsRoundActive()) then
+		if(!IsValid(admiral)) then
+			SpawnAdmiralEntity()
+		end
+		if(!IsValid(submarine)) then
+			SpawnSubmarineEntity()
+		end
+	end
+
+
 	EndRoundCheck()
 	SubmarineFlood(submarine)
 end
