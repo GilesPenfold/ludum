@@ -1,15 +1,14 @@
 ZombiesInScene = {}
 
-function SpawnTimer()
-    if( !timer.Exists( "SpawnTimer" ) ) then
-        timer.Create( "SpawnTimer",2,0,function() 
-            if( #ZombiesInScene > 10 ) then
-                return
-            else
-                SpawnZombie()
-            end
-        end)
-    end
+function SpawnZombies()
+	timer.Create( "SpawnTimer",2,0,function() 
+		if( #ZombiesInScene > 10 ) then
+			return
+		else
+			SpawnZombie()
+		end
+	end)
+
 end
 
 function SpawnZombie()
@@ -29,4 +28,13 @@ function SpawnZombie()
 	npc:SetPos(SpawnZombieAt)
 	npc:Spawn()
 	
+end
+
+function RemoveAllZombies()
+	for k,v in pairs(ZombiesInScene) do
+		if(IsValid(v)) then
+			SafeRemoveEntity(v)
+		end
+	end
+	ZombiesInScene = {}
 end

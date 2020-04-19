@@ -9,7 +9,7 @@ function StartRound()
 		end
 	end
 	
-	if(alive >= #player.GetAll() && #player.GetAll() >= 1) then
+	if(alive >= #player.GetAll() && #player.GetAll() >= 1 && !timer.Exists( "RoundStartTimer" )) then
 		for k,ply in pairs(player.GetAll()) do
 			ply:ChatPrint("You find yourself stranded in the middle of the Pacific Ocean, upon the sinking submarine Ludum. The Admiral has been turned into a baby, and zombies are trying to consume your squishy brains! What a terrible day!")
 			ply:ChatPrint("Round begins in 15 seconds.")

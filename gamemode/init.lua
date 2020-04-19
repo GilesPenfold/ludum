@@ -31,7 +31,9 @@ local g_station = nil
 
 function StartGame()
 	print("starting game")
-	SpawnTimer()
+	ResetSubmarineManager()
+	RemoveAllZombies()
+	SpawnZombies()
 	BabySwitchTimer(ply)
 	SpawnSubmarineEntity()
 	SpawnAdmiralEntity()
@@ -77,6 +79,8 @@ function StopGame()
 		net.Start("alarmstop")
 		net.Send( ply )
 	end
+	
+	
 end
 
 function GM:PlayerInitialSpawn( ply )

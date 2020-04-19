@@ -1,6 +1,6 @@
 
 local repairpoints = {}
-local floodAmountPerPoint = 15
+local floodAmountPerPoint = 8
 local water = {}
 local waterSet = false
 local waterOriginalPos = nil
@@ -45,9 +45,9 @@ function SubmarineFlood( sub )
 
 				if(previousFlooding != currentFlooding) then
 			
-						timer.Create( "waterIncrementTimer",0.02,floodIncrement * 10,function()
+						timer.Create( "waterIncrementTimer"..currentFlooding,0.02,floodIncrement * 10,function()
 							if(!IsValid(water[1])) then return end
-
+							if(!IsValid(sub)) then return end
 							local currentWaterPos = water[1]:GetPos()
 							local newWaterLevel = Vector(currentWaterPos.x,currentWaterPos.y, math.Clamp(currentWaterPos.z + 0.07, -600, 600)) -- 800 is flooded to max map height, so mult by 0.8 to scale properly
 							water[1]:SetPos(newWaterLevel)
@@ -71,8 +71,7 @@ function ResetSubmarineManager()
 	repairpoints = {}
 	if(waterOriginalPos != nil) then
 		if(IsValid(water[1])) then 
-			water[1]:SetPos(Vector(waterOriginalPos.x, waterOriginalPos.y,waterOriginalPos.z - 100))
-			waterSet = false
+			water[1]:SetPos(Vector(waterOriginalPos.x, waterOriginalPos.y,waterOriginalPos.z))
 		end
 	end
 end
