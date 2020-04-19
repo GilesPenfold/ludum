@@ -32,6 +32,8 @@ function ENT:Use(activator, caller)
 				entDur = self:GetEntityDurability()
 				print(activator:GetName() .. " repaired a repair point to " .. entDur)
 				
+				self:EmitSound("physics/metal/weapon_impact_hard1.wav")
+				
 				if(entDur >= self:GetRepairPointMaxHealth()) then
 					self:SetCapped(true)
 					print("Repair point has been capped.")

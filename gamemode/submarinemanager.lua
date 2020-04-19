@@ -1,6 +1,6 @@
 
 local repairpoints = {}
-local floodAmountPerPoint = 10
+local floodAmountPerPoint = 20
 
 function SetupSubmarine()
 	repairpoints = ents.FindByClass("repair_point")

@@ -18,14 +18,62 @@ include("custom_classes.lua")
 include("roundsystem.lua")
 include("ZombieSpawner.lua")
 
+util.AddNetworkString( "music" )
+util.AddNetworkString( "alarm" )
+
+util.AddNetworkString( "musicstop" )
+util.AddNetworkString( "alarmstop" )
+
 submarine = nil
+local g_station = nil
 
 function StartGame()
+	
 	SpawnTimer()
 	BabySwitchTimer(ply)
 	SpawnSubmarineEntity()
 	Interactions()
 	SetupSubmarine()
+	
+	for k,v in pairs(player.GetHumans()) do
+		net.Start("music")
+		net.Send( v )
+	end
+	if( !timer.Exists( "musicTimer") ) then
+		timer.Create( "musicTimer" ,44, 0, function()
+				for k,v in pairs(player.GetHumans()) do
+					net.Start("music")
+					net.Send( v )
+				end
+		end)
+	end
+	
+	for k,v in pairs(player.GetHumans()) do
+		net.Start("alarm")
+		net.Send( v )
+	end
+	if( !timer.Exists( "alarmTimer") ) then
+		timer.Create( "alarmTimer" ,7.2, 0, function()
+		for k,v in pairs(player.GetHumans()) do
+			net.Start("alarm")
+			net.Send( v )
+		end
+		end)
+	end
+	
+
+end
+
+function StopGame()
+	timer.Remove("musicTimer")
+	timer.Remove("alarmTimer")
+	
+	for k,v in pairs(player.GetHumans()) do
+		net.Start("musicstop")
+		net.Send( ply )
+		net.Start("alarmstop")
+		net.Send( ply )
+	end
 end
 
 function GM:PlayerInitialSpawn( ply )
@@ -34,7 +82,10 @@ function GM:PlayerInitialSpawn( ply )
 end
 
 function GM:PlayerSpawn( ply )	
+
 	if(IsRoundActive()) then
+	
+		
 		if(ply:GetLoadoutName() == "Engineer") then
 			ply:ChatPrint("You are an " .. ply:GetLoadoutName() .. "!" )
 			ply:ChatPrint("Find repair points around the map and repair them with your crowbar.","(Press E to interact whilst holding the crowbar). "  )
@@ -42,7 +93,7 @@ function GM:PlayerSpawn( ply )
 			ply:ChatPrint("You are a ".. ply:GetLoadoutName() .. "!" )
 			ply:ChatPrint("You are this submarines last bastion of hope against the zombies. Use your shotgun to kill zombies and protect the Engineers."  )
 		end
-		print ( "Player: " .. ply:Nick() .. " has spawned as an " .. ply:GetLoadoutName() )
+		print ( "Player: " .. ply:Nick() .. " has spawned as an " .. ply:GetLoadoutName() )		
 	else
 		StartRound()
 	end

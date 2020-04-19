@@ -63,7 +63,7 @@ function EndRoundCheck()
 				EndRound(false) -- failure
 			end
 			
-			if(GetSubmarine():IsDead()) then
+			if(GetSubmarine():GetIsFlooded()) then
 				EndRound(false) -- failure
 			end
 			roundTimer = roundTimer - 1
@@ -88,6 +88,7 @@ function EndRound(victory)
 		
 		timer.Create("cleanupTimer", 3, 1, function()
 			print("Cleanup")
+			StopGame()
 			game.CleanUpMap(false, {})
 			for k, ply in pairs(player.GetAll()) do
 				if(ply:Alive()) then

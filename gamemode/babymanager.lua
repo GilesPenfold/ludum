@@ -39,7 +39,7 @@ function SwitchBaby( ply )
 	table.Empty(storedAmmo)
 	table.Empty(storedWeapons)
 	
-	if(GetSubmarine():IsDead()) then return end
+	if(GetSubmarine():GetIsFlooded()) then return end
 	
 	if(#allPlayers == 1) then 
 		playerWithBaby = allPlayers[1]

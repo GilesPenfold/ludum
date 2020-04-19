@@ -3,7 +3,6 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
-local IsDead = false
 local startingFlooding = 1
 local maxFlooding = 1000
 
@@ -14,8 +13,7 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS )
 	self:SetHealth( startingFlooding )
 	self:SetMaxHealth(startingFlooding)
-	IsDead = false;
-	
+
 	self:AddEFlags( EFL_FORCE_CHECK_TRANSMIT )
 	
 	local phys = self:GetPhysicsObject()
@@ -26,10 +24,6 @@ end
 
 function ENT:UpdateTransmitState()	
 	return TRANSMIT_ALWAYS 
-end
-
-function ENT:IsDead()
-	return IsDead
 end
 
 function ENT:Think()
@@ -47,7 +41,7 @@ function ENT:Think()
 	if submarineHealth <= 0 then
 		for k, ply in pairs(player.GetAll()) do
 			ply:ChatPrint("The submarine has flooded!")
-			IsDead = true
+			self:SetIsFlooded(true)
 		end
 	end
 	
