@@ -24,22 +24,19 @@ util.AddNetworkString( "alarm" )
 util.AddNetworkString( "musicstop" )
 util.AddNetworkString( "alarmstop" )
 
-util.AddNetworkString( "admiralHealth" )
 
-admiralHealth = 10
-admiralMaxHealth = 10
+admiral = nil
 submarine = nil
 local g_station = nil
-
 
 function StartGame()
 	print("starting game")
 	SpawnTimer()
 	BabySwitchTimer(ply)
 	SpawnSubmarineEntity()
+	SpawnAdmiralEntity()
 	Interactions()
 	SetupSubmarine()
-	admiralHealth = admiralMaxHealth
 	
 	for k,v in pairs(player.GetHumans()) do
 		net.Start("music")
@@ -152,19 +149,28 @@ function Interactions()
 end
 
 function SpawnSubmarineEntity()
-    submarine = ents.Create("submarine")
-	print(submarine:GetClass())
-    submarine:SetPos(Vector( 0,0,-1000 ))
-    submarine:Spawn()
-	print("Submarine Spawned with health " .. submarine:Health())
+	if(!IsValid(submarine)) then
+		submarine = ents.Create("submarine")
+		submarine:SetPos(Vector( 0,0,-1000 ))
+		submarine:Spawn()
+		print("Submarine Spawned with health " .. submarine:Health())
+	end
+end
+
+function SpawnAdmiralEntity()
+	if(!IsValid(admiral)) then
+		admiral = ents.Create("admiral")
+		admiral:SetPos(Vector( 0,0,-1001 ))
+		admiral:Spawn()
+	end
 end
 
 function GetSubmarine()
 	return submarine
 end
 
-function GetAdmiralHealth()
-	return admiralHealth
+function GetAdmiral()
+	return admiral
 end
 
 function GM:Think()
@@ -175,6 +181,7 @@ end
 function GM:PlayerHurt( victim,  attacker,  healthRemaining,  damageTaken )
 	if(victim:GetActiveWeapon():GetClass() == "weapon_vampiricbaby") then
 		print("Admiral hit!")
-		admiralHealth = admiralHealth - 1
+		local admiralHealth = admiral:GetAdmiralHealth()
+		admiral:SetAdmiralHealth(admiralHealth - 1)
 	end
 end

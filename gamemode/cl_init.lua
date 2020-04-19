@@ -5,7 +5,6 @@ local g_station = nil
 local g_alarm = nil
 local wave = Material( "pp/blury", "noclamp smooth" )
 
-local locAdmiralHealth = 10
 
 function GM:HUDPaint()
 
@@ -16,9 +15,6 @@ function GM:HUDPaint()
 		subFlooding = v:GetSubmarineFlooding()
 		waterLevel = v:GetWaterLevel()
 	end
-	
-	print(waterLevel.z)
-	print(LocalPlayer():GetPos().z)
 	
 	if((LocalPlayer():GetPos().z - 310) < waterLevel.z) then
 		
@@ -39,6 +35,24 @@ function GM:HUDPaint()
 	draw.RoundedBox(10, vPos,hPos, totalWidth, height, Color(0,50,255, 255))	
 	
 	draw.SimpleText("Submarine Flooding " .. subFlooding-1 .. "/" .. 1000, "HudHintTextLarge", vPos + 10, hPos + 3, Color(255,255,255,255), 0, 0)
+	
+	local admiralHealth = 10
+	
+	for k,v in pairs(ents.FindByClass("admiral")) do
+		admiralHealth = v:GetAdmiralHealth()
+	end
+	
+	vPos = ScrW()-450
+	hPos = 110
+	
+	width = 350 
+	totalWidth = width * (admiralHealth / 10 )
+	height = 50
+
+	draw.RoundedBox(10, vPos,hPos, width, height, Color(255,50,0, 150))
+	draw.RoundedBox(10, vPos,hPos, totalWidth, height, Color(255,50,0, 255))	
+	
+	draw.SimpleText("Admiral's Health " .. admiralHealth .. "/" .. 10, "HudHintTextLarge", vPos + 10, hPos + 3, Color(255,255,255,255), 0, 0)
 
 end
 

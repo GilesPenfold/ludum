@@ -19,6 +19,8 @@ function SubmarineFlood( sub )
 	
 	if( !timer.Exists( "floodTimer" ) ) then
 		timer.Create( "floodTimer",10,1,function()	
+			if(!IsValid(sub)) then return end
+			if(!IsRoundActive()) then return end
 			local totalDangerPoints = 0
 			for k,v in pairs(repairpoints) do
 				if(IsValid(v)) then
@@ -59,8 +61,9 @@ function SubmarineFlood( sub )
 	
 end
 
-function DestroyRepairPoints()
-	for k,v in pairs(repairpoints) do
+function ResetSubmarineManager()
+	rp = ents.FindByClass("repair_point")
+	for k,v in pairs(rp) do
 		if(IsValid(v)) then
 			SafeRemoveEntity(v)
 		end

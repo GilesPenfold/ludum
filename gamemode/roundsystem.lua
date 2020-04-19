@@ -1,4 +1,5 @@
 roundActive = false
+roundTimer = 600
 
 function StartRound()
 	local alive = 0
@@ -17,7 +18,7 @@ function StartRound()
 		if( !timer.Exists( "RoundStartTimer" ) ) then
 			timer.Create( "RoundStartTimer",15,1,function() 
 				roundActive = true
-				roundTimer = 300
+				roundTimer = 600
 				
 				local soldierIndex = math.random(1,#player.GetAll())
 				local currentIndex = 1
@@ -33,6 +34,10 @@ function StartRound()
 					ply:SetupForNewRound( )
 				end
 				StartGame()
+				
+				for k,ply in pairs(player.GetAll()) do
+					ply:ChatPrint("You have 10 minutes to survive.")
+				end
 			end)
 		end
 	else
@@ -66,6 +71,11 @@ function EndRoundCheck()
 			if(GetSubmarine():GetIsFlooded()) then
 				EndRound(false) -- failure
 			end
+			
+			if(GetAdmiral():GetAdmiralHealth() <= 0) then
+				EndRound(false) -- failure
+			end
+			
 			roundTimer = roundTimer - 1
 			if(roundTimer == 0) then
 				EndRound(true) -- victory
@@ -101,7 +111,10 @@ function EndRound(victory)
 			if(IsValid(GetSubmarine())) then
 				GetSubmarine():ResetSubmarine()
 			end
-			DestroyRepairPoints()
+			if(IsValid(GetAdmiral())) then
+				GetSubmarine():ResetSubmarine()
+			end
+			ResetSubmarineManager()
 			roundActive = false
 		end)
 	end
