@@ -5,6 +5,8 @@ local g_station = nil
 local g_alarm = nil
 local wave = Material( "pp/blury", "noclamp smooth" )
 
+local locAdmiralHealth = 10
+
 function GM:HUDPaint()
 
 	local subFlooding = 1

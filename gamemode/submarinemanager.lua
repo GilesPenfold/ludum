@@ -1,6 +1,6 @@
 
 local repairpoints = {}
-local floodAmountPerPoint = 200
+local floodAmountPerPoint = 15
 local water = {}
 local waterSet = false
 local waterOriginalPos = nil

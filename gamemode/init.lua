@@ -24,8 +24,13 @@ util.AddNetworkString( "alarm" )
 util.AddNetworkString( "musicstop" )
 util.AddNetworkString( "alarmstop" )
 
+util.AddNetworkString( "admiralHealth" )
+
+admiralHealth = 10
+admiralMaxHealth = 10
 submarine = nil
 local g_station = nil
+
 
 function StartGame()
 	print("starting game")
@@ -34,6 +39,7 @@ function StartGame()
 	SpawnSubmarineEntity()
 	Interactions()
 	SetupSubmarine()
+	admiralHealth = admiralMaxHealth
 	
 	for k,v in pairs(player.GetHumans()) do
 		net.Start("music")
@@ -157,6 +163,10 @@ function GetSubmarine()
 	return submarine
 end
 
+function GetAdmiralHealth()
+	return admiralHealth
+end
+
 function GM:Think()
 	EndRoundCheck()
 	SubmarineFlood(submarine)
@@ -165,5 +175,6 @@ end
 function GM:PlayerHurt( victim,  attacker,  healthRemaining,  damageTaken )
 	if(victim:GetActiveWeapon():GetClass() == "weapon_vampiricbaby") then
 		print("Admiral hit!")
+		admiralHealth = admiralHealth - 1
 	end
 end
