@@ -44,3 +44,13 @@ function ply:GetLoadoutName()
 	local plyClass = PLAYER_CLASSES[self:GetNWInt("PlayerClass")]
 	return plyClass.name
 end
+
+function ply:SetupForNewRound()
+	self:PlayerLoadout()
+	self:PlayerSetModel()
+	self:SetupHands()
+end
+
+function ply:SetNewClass(class)
+	self:SetNWInt("PlayerClass", class)
+end

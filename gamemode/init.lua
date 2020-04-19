@@ -25,15 +25,12 @@ end
 
 function GM:PlayerInitialSpawn( ply )
 	ply:SetupTeam(0)
-	ply:SetNWInt("PlayerClass",3)
+	ply:SetNewClass(1)
 end
 
 function GM:PlayerSpawn( ply )	
 	if(IsRoundActive()) then
-		ply:PlayerLoadout()
-		ply:PlayerSetModel()
-		ply:SetupHands()
-		ply:ChatPrint("You have spawned!")
+		ply:ChatPrint("You have spawned as: " .. ply:GetLoadoutName())
 		print ( "Player: " .. ply:Nick() .. " has spawned as an " .. ply:GetLoadoutName() )
 	else
 		StartRound()
@@ -42,7 +39,11 @@ end
 
 function GM:PlayerDeath(ply)
 	if(IsRoundActive()) then
-		timer.Create("spawntimer", 5, 1, function()
+		timer.Create("spawntimer", 10, 1, function()
+			ply:Spawn()
+		end)
+	else
+		timer.Create("spawntimer", 2, 1, function()
 			ply:Spawn()
 		end)
 	end

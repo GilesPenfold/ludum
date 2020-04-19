@@ -4,18 +4,47 @@ function StartRound()
 	local alive = 0
 	for k,v in pairs(player.GetAll()) do
 		if(v:Alive()) then
-		alive = alive + 1
+			alive = alive + 1
 		end
 	end
 	
 	if(alive >= #player.GetAll() && #player.GetAll() >= 1) then
-		roundActive = true
-		roundTimer = 300
-		StartGame()
 		for k,ply in pairs(player.GetAll()) do
-			ply:ChatPrint("The submarine is sinking, the Admiral has been turned into a baby, and zombies are climbing in! What a terrible day!")
-			ply:ChatPrint("Keep Admiral Baby alive whilst repairing the submarine and defending yourselves from the zombies.")
+			ply:ChatPrint("Round begins in 3 seconds.")
 		end
+		
+		if( !timer.Exists( "RoundStartTimer" ) ) then
+			timer.Create( "RoundStartTimer",3,1,function() 
+				roundActive = true
+				roundTimer = 300
+				
+				local soldierIndex = math.random(1,#player.GetAll())
+				local currentIndex = 1
+				
+				for k,ply in pairs(player.GetAll()) do
+					ply:KillSilent()
+					ply:Spawn()
+					local class = 2
+					if(soldierIndex == currentIndex) then
+						class = 3
+					end
+					ply:SetNewClass(class)
+					ply:SetupForNewRound( )
+					ply:ChatPrint("Submarine Ludum is sinking, the Admiral has been turned into a baby, and zombies are trying to consume our squishy brains! What a terrible day!")
+					ply:ChatPrint("Keep Admiral Baby alive whilst repairing the submarine and defending yourselves from the zombies.")
+				end
+				StartGame()
+			end)
+		end
+	else
+		if( !timer.Exists( "RoundWarmupTimer" ) ) then
+			timer.Create( "RoundWarmupTimer",15,1,function() 
+				for k,ply in pairs(player.GetAll()) do
+					ply:ChatPrint("Not enough players to begin round. Need at least 2 players to begin. Currently, we have " .. #player.GetHumans() .. " active players online.")
+				end
+			end)
+		end
+		
 	end
 	print("Round Started: " .. tostring(roundActive))
 	EndRoundCheck() -- Might not be necessary
@@ -29,7 +58,6 @@ function EndRoundCheck()
 	
 	if( !timer.Exists( "delayTimer" ) ) then
 		timer.Create("delayTimer", 1, 1, function()
-			print("Timer tick")
 			if(!IsValid(GetAdmiralBaby())) then return end
 			if(GetAdmiralBaby():IsDead()) then
 				EndRound(false) -- failure
