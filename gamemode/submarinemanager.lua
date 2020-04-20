@@ -45,7 +45,7 @@ function SubmarineFlood( sub )
 
 				if(previousFlooding != currentFlooding) then
 			
-						timer.Create( "waterIncrementTimer"..currentFlooding,0.02,floodIncrement * 10,function()
+						timer.Create( "waterIncrementTimer"..math.random(1,100000),0.02,floodIncrement * 10,function()
 							if(!IsValid(water[1])) then return end
 							if(!IsValid(sub)) then return end
 							local currentWaterPos = water[1]:GetPos()
@@ -69,9 +69,13 @@ function ResetSubmarineManager()
 		end
 	end
 	repairpoints = {}
-	if(waterOriginalPos != nil) then
-		if(IsValid(water[1])) then 
-			water[1]:SetPos(Vector(waterOriginalPos.x, waterOriginalPos.y,waterOriginalPos.z))
+	
+	wt = ents.FindByClass( "func_water_analog" )
+	for k,v in pairs(wt) do
+		if(IsValid(v)) then
+			if(waterOriginalPos != nil) then
+				v:SetPos(Vector(waterOriginalPos.x, waterOriginalPos.y,waterOriginalPos.z))
+			end
 		end
 	end
 end

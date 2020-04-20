@@ -24,7 +24,7 @@ function ENT:UpdateTransmitState()
 end
 
 function ENT:Use(activator, caller)
-	if(activator:GetActiveWeapon():GetClass() == "weapon_vampiricbaby" && !self:GetCapped() && !self:GetBroken()) then
+	if(activator:GetActiveWeapon():GetClass() == "weapon_weakcrowbar" && !self:GetCapped() && !self:GetBroken()) then
 		if( !timer.Exists( "entityInteractTimer" .. self:GetIdentifier() ) ) then
 			timer.Create( "entityInteractTimer" .. self:GetIdentifier() ,0.2,1,function()			
 				local entDur = self:GetEntityDurability()

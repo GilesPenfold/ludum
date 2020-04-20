@@ -16,7 +16,7 @@ function GM:HUDPaint()
 		waterLevel = v:GetWaterLevel()
 	end
 	
-	if((LocalPlayer():GetPos().z - 310) < waterLevel.z) then
+	if((LocalPlayer():GetPos().z - 330) < waterLevel.z) then
 		
 		surface.SetMaterial( wave )
 		surface.SetDrawColor( 30, 30, 51, 255 )

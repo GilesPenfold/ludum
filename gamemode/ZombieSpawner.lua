@@ -1,8 +1,11 @@
 ZombiesInScene = {}
 
+local numberOfZombies = 15
+local zombieSpawnAdjustment = 2
+
 function SpawnZombies()
 	timer.Create( "SpawnTimer",2,0,function() 
-		if( #ZombiesInScene > 10 ) then
+		if( #ZombiesInScene > numberOfZombies ) then
 			return
 		else
 			SpawnZombie()
@@ -25,7 +28,7 @@ function SpawnZombie()
     local npc = ents.Create( "npc_zombie" )
     table.insert(ZombiesInScene,npc)
 	SpawnZombieAt = ZombieSpawnPoints[math.random(1,#ZombieSpawnPoints)]:GetPos()
-	npc:SetPos(SpawnZombieAt)
+	npc:SetPos(SpawnZombieAt + Vector(math.random(1,zombieSpawnAdjustment), math.random(1,zombieSpawnAdjustment), 0))
 	npc:Spawn()
 	
 end

@@ -76,69 +76,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-
-	if(CLIENT) then return end
-
-	local ply = self:GetOwner()
-
-	ply:LagCompensation(true)
-
-	local shootPos = ply:GetShootPos()
-	local endShootPos = shootPos + ply:GetAimVector() * 70
-	local tmin = Vector(1,1,1) * -10
-	local tmax = Vector(1,1,1) * 10
-	
-	local tr = util.TraceHull ({
-		start = shootPos,
-		endpos = endShootPos,
-		filter = ply,
-		mask = MASK_SHOT_HULL,
-		mins = tmin,
-		maxs = tmax })
-	
-	if(not IsValid(tr.Entity)) then
-		tr = util.TraceLine ({
-			start = shootPos,
-			endpos = endShootPos,
-			filter = ply,
-			mask = MASK_SHOT_HULL })
-	end
-	
-	local ent = tr.Entity
-	
-	if(IsValid(ent) && ( ent:IsPlayer() || ent:IsNPC() ) ) then
-		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-		ply:SetAnimation(PLAYER_ATTACK1)
-		
-		ply:EmitSound("baby_sound")
-		ent:TakeDamage(20)
-		
-		if(ent:Health() < 1) then
-			if(ent:IsPlayer()) then
-				ent:Kill()
-			end
-		end
-
-		for k,v in pairs(ents.FindByClass("submarine")) do
-			local newHealth = math.Clamp(v:Health() + 20, 1, v:GetMaxHealth() )
-			print(newHealth)
-			self:CallOnClient("SetBabyHealth",newHealth)
-			v:SetHealth(newHealth)
-		end
-		
-		
-		
-	elseif(not IsValid(ent) ) then
-	
-		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
-		ply:SetAnimation(PLAYER_ATTACK1)
-		
-		ply:EmitSound("baby_sound")
-	end
-	
-	self:SetNextPrimaryFire(CurTime() + self:SequenceDuration() + 0.1)
-
-	ply:LagCompensation(false)
+	return false
 end
 
 function SWEP:CanSecondaryAttack()

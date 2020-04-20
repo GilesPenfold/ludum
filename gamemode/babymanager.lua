@@ -3,14 +3,14 @@ local playerWithBaby = nil
 local storedWeapons = {}
 local storedAmmo = {}
 
-TimeToBabySwap = 5
+TimeToBabySwap = 30
 
 function BabySwitchTimer(ply)
-    if( !timer.Exists( "BabySwitchTimer" ) ) then
-        timer.Create( "BabySwitchTimer",TimeToBabySwap,0,function() 
-            SwitchBaby(ply)
-        end)
-    end
+	SwitchBaby(ply)
+	timer.Create( "BabySwitchTimer",TimeToBabySwap,0,function() 
+		SwitchBaby(ply)
+	end)
+
 end
 
 function SwitchBaby( ply )
@@ -22,7 +22,7 @@ function SwitchBaby( ply )
 
 	if(#allPlayers == 0) then return end
 	
-	if(playerWithBaby != nil && #storedWeapons != 0) then
+	if(IsValid(playerWithBaby) && #storedWeapons != 0) then
 		--print("Stripping baby owner of baby")
 		playerWithBaby:StripWeapons()
 		local idx = 1

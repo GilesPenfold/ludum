@@ -36,7 +36,7 @@ SWEP.AdminSpawnable				=	true
 SWEP.ShouldDropOnDie			=	false
 
 SWEP.Primary.ClipSize			=	6
-SWEP.Primary.ClipMax			=	24
+SWEP.Primary.ClipMax			=	12
 SWEP.Primary.DefaultClip		= 	12
 SWEP.Primary.Ammo				=	"Buckshot"
 SWEP.Primary.Automatic			=	false

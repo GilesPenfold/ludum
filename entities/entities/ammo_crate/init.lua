@@ -18,6 +18,11 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	activator:GiveAmmo( 20, 7, false )
+	local ammoCount = activator:GetAmmoCount(7)
+	if(ammoCount < 6) then
+		local amountToGive = 6 - ammoCount
+		activator:GiveAmmo( amountToGive, 7, false )
+	end
+	
 	print( "ammo receieved" )
 end

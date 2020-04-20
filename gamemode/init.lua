@@ -72,6 +72,8 @@ end
 function StopGame()
 	timer.Remove("musicTimer")
 	timer.Remove("alarmTimer")
+	timer.Remove("BabySwitchTimer")
+	timer.Remove("SpawnTimer")
 	
 	for k,ply in pairs(player.GetHumans()) do
 		net.Start("musicstop")
@@ -79,8 +81,11 @@ function StopGame()
 		net.Start("alarmstop")
 		net.Send( ply )
 	end
-	
-	
+end
+
+function ResetGame()
+	ResetSubmarineManager()
+	RemoveAllZombies()
 end
 
 function GM:PlayerInitialSpawn( ply )
@@ -94,27 +99,27 @@ function GM:PlayerSpawn( ply )
 
 		if(ply:GetLoadoutName() == "Engineer") then
 			ply:ChatPrint("You are an " .. ply:GetLoadoutName() .. "!" )
-			ply:ChatPrint("Find repair points around the map and repair them with your crowbar.","(Press E to interact whilst holding the crowbar). "  )
+			ply:ChatPrint("Find repair points around the map and hit them with your crowbar to repair them."  )
 		elseif(ply:GetLoadoutName() == "Soldier") then
 			ply:ChatPrint("You are a ".. ply:GetLoadoutName() .. "!" )
-			ply:ChatPrint("You are this submarines last bastion of hope against the zombies. Use your shotgun to kill zombies and protect the Engineers."  )
+			ply:ChatPrint("You are this submarines last bastion of hope against the zombies. Use your shotgun to kill zombies and protect the Engineers. (Restock your shotgun in the armoury)."  )
 		end
 		print ( "Player: " .. ply:Nick() .. " has spawned as an " .. ply:GetLoadoutName() )		
 	else
+		if(#player.GetHumans() == 0) then
+			StopGame()
+			EndRound(false)
+			ResetGame()
+		end
 		StartRound()
 	end
 end
 
 function GM:PlayerDeath(ply)
-	if(IsRoundActive()) then
-		timer.Create("spawntimer", 10, 1, function()
+
+	timer.Create("spawntimer", 2, 1, function()
 			ply:Spawn()
 		end)
-	else
-		timer.Create("spawntimer", 2, 1, function()
-			ply:Spawn()
-		end)
-	end
 end
 
 
@@ -179,6 +184,26 @@ end
 
 function GM:Think()
 	if(IsRoundActive()) then
+		
+		if(CLIENT) then
+			local waterLevel = -1000
+			for k,v in pairs(ents.FindByClass("submarine")) do
+				waterLevel = v:GetWaterLevel()
+			end
+			
+			local ply = LocalPlayer()
+			
+			if((ply:GetPos().z - 310) < waterLevel.z) then
+				if( !timer.Exists( "PlayerDrowningTimer" ) ) then
+					timer.Create( "PlayerDrowningTimer",1,1,function()
+						if((ply:GetPos().z - 310) < waterLevel.z) then
+							ply:SetHealth(ply:GetHealth() - 1)
+						end
+					end)
+				end
+			end
+		end
+	
 		if(!IsValid(admiral)) then
 			SpawnAdmiralEntity()
 		end
@@ -190,6 +215,7 @@ function GM:Think()
 
 	EndRoundCheck()
 	SubmarineFlood(submarine)
+	
 end
 
 function GM:PlayerHurt( victim,  attacker,  healthRemaining,  damageTaken )
